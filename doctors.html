@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('doctor-form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                fetch('/api/doctors', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('status').innerText = 'Doctor Added Successfully!';
+                    } else {
+                        document.getElementById('status').innerText = 'Error: ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('status').innerText = 'Error: ' + error;
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+     <!-- Navigation Menu -->
+     <nav>
+        <a href="index.html">Patient Registration</a> |
+        <a href="doctors.html">Doctor Registration</a> |
+        <a href="appointment.html">Book Appointment</a>
+    </nav>
+    <h1>Doctor Registration</h1>
+    <form id="doctor-form">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required><br>
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required><br>
+        <label for="specialization">Specialization:</label>
+        <input type="text" id="specialization" name="specialization" required><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        <button type="submit">Register</button>
+    </form>
+    <p id="status"></p>
+</body>
+</html>

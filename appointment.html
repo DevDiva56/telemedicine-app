@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Booking</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('appointment-form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                fetch('/api/appointments', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('status').innerText = 'Appointment Booked Successfully!';
+                    } else {
+                        document.getElementById('status').innerText = 'Error: ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('status').innerText = 'Error: ' + error;
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <a href="index.html">Patient Registration</a> |
+        <a href="doctors.html">Doctor Registration</a> |
+        <a href="appointment.html">Book Appointment</a>
+    </nav> 
+    
+    <h1>Book an Appointment</h1>
+    <form id="appointment-form">
+        <label for="patient_id">Patient ID:</label>
+        <input type="number" id="patient_id" name="patient_id" required><br>
+        <label for="doctor_id">Doctor ID:</label>
+        <input type="number" id="doctor_id" name="doctor_id" required><br>
+        <label for="appointment_date">Date:</label>
+        <input type="date" id="appointment_date" name="appointment_date" required><br>
+        <label for="appointment_time">Time:</label>
+        <input type="time" id="appointment_time" name="appointment_time" required><br>
+        <button type="submit">Book Appointment</button>
+    </form>
+    <p id="status"></p>
+</body>
+</html>
